@@ -24,8 +24,8 @@ hogy-hogy -> hogyhogy # Egybeírás.
 	-> \1, hogy # Hiányzó vessző?
 
 # túl sok vessző
-([-\w]+), (ahelyett|anélkül|aszerint), hogy -> \1, \2 hogy|\1 \2, hogy # Kötőszószerű kapcsolat esetén nem írunk a „hogy” elé vesszőt. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#243.
-([-\w]+), illetve, (ha|hogy) -> \1, illetve \2 # Kötőszószerű kapcsolat esetén nem írunk az „illetve” után vesszőt. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#243.
+([-\w]+), (ahelyett|anélkül|aszerint), hogy -> \1, \2 hogy|\1 \2, hogy # Kötőszószerű kapcsolat esetén nem írunk a „hogy” elé vesszőt. | http://helyesiras.mta.hu/helyesiras/default/akh12#244
+([-\w]+), illetve, (ha|hogy) -> \1, illetve \2 # Kötőszószerű kapcsolat esetén nem írunk az „illetve” után vesszőt. | http://helyesiras.mta.hu/helyesiras/default/akh12#244
 
 ###################### nagybetűsítés #################
 [code]
@@ -56,24 +56,24 @@ word [a-zöüóűőúéáíA-ZÖÜÓŰŐÚÉÁÍ]+
 
 punct [?!,:;%‰‱°„”]
 
-"^[-—] " <- option("dash") -> "– "		# A gondolatjel nagykötőjel | http://hu.wikipedia.org/wiki/Nagykötőjel
-" [-—]([ ,;])" <- option("dash") -> " –\1"	# A gondolatjel nagykötőjel | http://hu.wikipedia.org/wiki/Nagykötőjel
+"^[-—] " <- option("dash") -> "– "		# A gondolatjel nagykötőjel | http://helyesiras.mta.hu/helyesiras/default/akh12#240l
+" [-—]([ ,;])" <- option("dash") -> " –\1"	# A gondolatjel nagykötőjel | http://helyesiras.mta.hu/helyesiras/default/akh12#240l
 # És - hogy is mondjam -, jó. -> És – hogy is mondjam –, jó.
 
-^[-–]{word} <- option("dash") -> – {word}		# Gondolatjel szóközzel a felsorolásnál | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#258.
+^[-–]{word} <- option("dash") -> – {word}		# Gondolatjel szóközzel a felsorolásnál | http://helyesiras.mta.hu/helyesiras/default/akh12#259
 
-"[[][.][.][.]]" <- option("elli") -> […] 	# Három pont | http://hu.wikipedia.org/wiki/Három_pont 
+"[[][.][.][.]]" <- option("elli") -> […] 	# Három pont | http://helyesiras.mta.hu/helyesiras/default/akh12#241b
 # [...] -> […]
-[.][.][.] <- option("elli") -> …		# Három pont | http://hu.wikipedia.org/wiki/Három_pont 
+[.][.][.] <- option("elli") -> …		# Három pont | http://helyesiras.mta.hu/helyesiras/default/akh12#241b
 # Vége... -> Vége…
 
 " +([.?!,:;)”])\b" -> "\1 " 	# Felcserélt szóköz és írásjel?
-" +([.?!,:;)”])" -> \1		# Szóköz nélkül tapadó írásjel | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#239.
+" +([.?!,:;)”])" -> \1		# Szóköz nélkül tapadó írásjel | http://helyesiras.mta.hu/helyesiras/default/akh12#240
 # A ( kicsit ) más. -> A (kicsit) más.
 
 E ( |$) # space or end of sentence
 "[:,;]([.?!,;:]){E}" -> \1{E}	# Felesleges írásjel.
-"\b[.][.]{E}" -> .{E}|…{E}	# Pont vagy három pont? | http://hu.wikipedia.org/wiki/Három_pont 
+"\b[.][.]{E}" -> .{E}|…{E}	# Pont vagy három pont? | http://helyesiras.mta.hu/helyesiras/default/akh12#241b
 #"\b[.]([?!]){E}" -> \1{E}	# Felesleges írásjel.
 # És,, stb.? -> És, stb.?
 # És.. -> És.|…
@@ -89,41 +89,42 @@ E ( |$) # space or end of sentence
 (^|\b|{punct}|[.]) {4,}(\b|$) <- option("spaces2") -> "\1 |\1	" # Szóközök cseréje egy szóközre vagy tabulátorra:
 
 (?i)(\d+)(x| x )(\d+(-\w+)?) -> \1×\3|\1 · \3 # Szorzásjel. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#275.
+# a · jelet kivették a 12-ből, × nincs és nem is volt. most mi legyen?
 # 5 x 6 -> 5 × 6
 # 800x600-as -> 800×600-as
 
 b {Abc}*
-(?i){word}['´]{b} <- option("apost") -> {word}’{b}	#  Valódi aposztróf. | http://hu.wikipedia.org/wiki/Aposztróf
+(?i){word}['´]{b} <- option("apost") -> {word}’{b}	#  Valódi aposztróf. | http://helyesiras.mta.hu/helyesiras/default/akh12#275
 # biz' isten -> biz’ isten
 
 # ’79-ben
 
-['´](\d\d(-\w+)?) <- option("apost") -> ’\1	#  Valódi aposztróf. | http://hu.wikipedia.org/wiki/Aposztróf
+['´](\d\d(-\w+)?) <- option("apost") -> ’\1	#  Valódi aposztróf. | http://helyesiras.mta.hu/helyesiras/default/akh12#275
 
 [)] <- option("par") and not "(" in TEXT -> # Felesleges zárójel?
 
 ######################## idézés ######################
 
-(?i)[\"“”‟„]({word}[^\"“”‟„]*)[\"“‟] <- option("quot") -> „\1” # Idézőjelek. | http://hu.wikipedia.org/wiki/Idézőjel
-(?i)[\"“”‟]({word}[^\"“”‟„]*)[\"“”‟] <- option("quot") -> „\1” # Idézőjelek. | http://hu.wikipedia.org/wiki/Idézőjel
+(?i)[\"“”‟„]({word}[^\"“”‟„]*)[\"“‟] <- option("quot") -> „\1” # Idézőjelek. | http://helyesiras.mta.hu/helyesiras/default/akh12#240j
+(?i)[\"“”‟]({word}[^\"“”‟„]*)[\"“”‟] <- option("quot") -> „\1” # Idézőjelek. | http://helyesiras.mta.hu/helyesiras/default/akh12#240j
 # A "kicsi" macska. -> A „kicsi” macska.
 
 # ASCII idézőjelek cseréje (,,vmi'', >>vmi<<)
 
-(?i),,({word}[^\"“”‟„><']*)'' -> „\1” # Idézőjelek. | http://hu.wikipedia.org/wiki/Idézőjel
-(?i)>>({word}[^\"“”‟„><']*)<< -> »\1« # Idézőjelek. | http://hu.wikipedia.org/wiki/Idézőjel
+(?i),,({word}[^\"“”‟„><']*)'' -> „\1” # Idézőjelek. | http://helyesiras.mta.hu/helyesiras/default/akh12#240j
+(?i)>>({word}[^\"“”‟„><']*)<< -> »\1« # Idézőjelek. | http://helyesiras.mta.hu/helyesiras/default/akh12#240j
 
 # angolszász idézőjelek cseréje
 
-(?i)‘+({word}[^\"“”‟„’]*)’+ -> „\1”|»\1« # Idézőjelek. | http://hu.wikipedia.org/wiki/Idézőjel
+(?i)‘+({word}[^\"“”‟„’]*)’+ -> „\1”|»\1« # Idézőjelek. | http://helyesiras.mta.hu/helyesiras/default/akh12#240j
 
 [Word]
 
-"([(„»]) +" -> \1		# Szóköz nélkül tapadó írásjel. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#239.
+"([(„»]) +" -> \1		# Szóköz nélkül tapadó írásjel. | http://helyesiras.mta.hu/helyesiras/default/akh12#240
 
-" +([«])" -> \1		# Szóköz nélkül tapadó írásjel. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#239.
+" +([«])" -> \1		# Szóköz nélkül tapadó írásjel. | http://helyesiras.mta.hu/helyesiras/default/akh12#240
 
-(?i)«({word}[^\"“”‟„’]*)» -> »\1« 	# Felcserélt belső idézőjelek. | http://hu.wikipedia.org/wiki/Idézőjel
+(?i)«({word}[^\"“”‟„’]*)» -> »\1« 	# Felcserélt belső idézőjelek. | http://helyesiras.mta.hu/helyesiras/default/akh12#240j
 
 ############### pénz #################################
 
@@ -155,45 +156,45 @@ d1 −?\d{1,3}  # 1, 2 vagy 3 számjegy (opcionális mínusszal)
 d2 −?\d{2,3}  # 2 vagy 3 számjegy (opcionális mínusszal)
 d3 \d{3}    # 3 számjegy
 dn \d{3}(?![  ][0-9])(,\w{1,4})?[%‰‱°]?(-\w+)? # 3 számjegy, toldalékkal is
-{d2}{dn}         <- option("numpart") and not option("thin") -> {d2} {dn}	    	# Nagy számok tagolása. (AkH. 274.)
-{d1}{d3}{dn}     <- option("numpart") and not option("thin") -> {d1} {d3} {dn}	# Nagy számok tagolása. (AkH. 274.)
-{d1}{d3}{d3}{dn} <- option("numpart") and not option("thin") -> {d1} {d3} {d3} {dn} # Nagy számok tagolása. (AkH. 274.)
+{d2}{dn}         <- option("numpart") and not option("thin") -> {d2} {dn}	    	# Nagy számok tagolása. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+{d1}{d3}{dn}     <- option("numpart") and not option("thin") -> {d1} {d3} {dn}	# Nagy számok tagolása. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+{d1}{d3}{d3}{dn} <- option("numpart") and not option("thin") -> {d1} {d3} {d3} {dn} # Nagy számok tagolása. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
 # Az 1234567890 -> Az 1 234 567 890
 
 # nagy számok tagolása nem törő keskeny szóközökkel (U+202F) (thin opciótól függően)
-{d2} ?{dn}         <- option("numpart") and option("thin") -> {d2} {dn}	    	# Nagy számok tagolása nem törő keskeny szóközökkel. (AkH. 274.)
-{d1} ?{d3} ?{dn}     <- option("numpart") and option("thin") -> {d1} {d3} {dn}	# Nagy számok tagolása nem törő keskeny szóközökkel. (AkH. 274.)
-{d1} ?{d3} ?{d3} ?{dn} <- option("numpart") and option("thin") -> {d1} {d3} {d3} {dn} # Nagy számok tagolása nem törő keskeny szóközökkel. (AkH. 274.)
+{d2} ?{dn}         <- option("numpart") and option("thin") -> {d2} {dn}	    	# Nagy számok tagolása nem törő keskeny szóközökkel. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+{d1} ?{d3} ?{dn}     <- option("numpart") and option("thin") -> {d1} {d3} {dn}	# Nagy számok tagolása nem törő keskeny szóközökkel. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+{d1} ?{d3} ?{d3} ?{dn} <- option("numpart") and option("thin") -> {d1} {d3} {d3} {dn} # Nagy számok tagolása nem törő keskeny szóközökkel. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
 
 # nagy számok tagolása nem törő szóközökkel (U+00A0)
 d1 \d{1,3}  # 1, 2 vagy 3 számjegy (opcionális mínusszal)
 d2 \d{2,3}  # 2 vagy 3 számjegy (opcionális mínusszal)
 d3 \d{3}    # 3 számjegy
 dn \d{3}(,\w+)?[%‰‱°]?(-\w+)? # 3 számjegy, toldalékkal is
--{d2}{dn}         <- option("numpart") and not option("thin") -> −{d2} {dn}	# Nagy számok tagolása. (AkH. 274.)
--{d1}{d3}{dn}     <- option("numpart") and not option("thin") -> −{d1} {d3} {dn}	# Nagy számok tagolása. (AkH. 274.)
--{d1}{d3}{d3}{dn} <- option("numpart") and not option("thin") -> −{d1} {d3} {d3} {dn} # Nagy számok tagolása. (AkH. 274.)
+-{d2}{dn}         <- option("numpart") and not option("thin") -> −{d2} {dn}	# Nagy számok tagolása. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+-{d1}{d3}{dn}     <- option("numpart") and not option("thin") -> −{d1} {d3} {dn}	# Nagy számok tagolása. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+-{d1}{d3}{d3}{dn} <- option("numpart") and not option("thin") -> −{d1} {d3} {d3} {dn} # Nagy számok tagolása. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
 
 # nagy számok tagolása nem törő keskeny szóközökkel (U+202F)
--{d2} ?{dn}         <- option("numpart") and option("thin") -> −{d2} {dn}	# Nagy számok tagolása nem törő keskeny szóközökkel. (AkH. 274.)
--{d1} ?{d3} ?{dn}     <- option("numpart") and option("thin") -> −{d1} {d3} {dn}	# Nagy számok tagolása nem törő keskeny szóközökkel. (AkH. 274.)
--{d1} ?{d3} ?{d3} ?{dn} <- option("numpart") and option("thin") -> −{d1} {d3} {d3} {dn} # Nagy számok tagolása nem törő keskeny szóközökkel. (AkH. 274.)
+-{d2} ?{dn}         <- option("numpart") and option("thin") -> −{d2} {dn}	# Nagy számok tagolása nem törő keskeny szóközökkel. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+-{d1} ?{d3} ?{dn}     <- option("numpart") and option("thin") -> −{d1} {d3} {dn}	# Nagy számok tagolása nem törő keskeny szóközökkel. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
+-{d1} ?{d3} ?{d3} ?{dn} <- option("numpart") and option("thin") -> −{d1} {d3} {d3} {dn} # Nagy számok tagolása nem törő keskeny szóközökkel. | http://helyesiras.mta.hu/helyesiras/default/akh12#274
 
 
 ([-−]?\d[\d,]*)[  ]([%‰‱°](-\w*)?)
-	-> \1\2 # Szóköz nélkül tapadó írásjel. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#275.
+	-> \1\2 # Szóköz nélkül tapadó írásjel. | http://helyesiras.mta.hu/helyesiras/default/akh12#275
 ([-−]?\d\d*)[.](\d\d*)\b(?![.])([%‰‱°](-\w*)?) <- option("comma")
-	-> \1,\2\3		# Tizedesvessző a helyes írásjel. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#291.
+	-> \1,\2\3		# Tizedesvessző a helyes írásjel. | http://helyesiras.mta.hu/helyesiras/default/akh12#293
 (\d\d*)[.](\d)\b(?![.])
 	# kivéve, ha tulajdonnév előzi meg (pl. Firefox 3.5
 	<- option("comma") and (not word(-1) or not re.match("[A-Z]", word(-1)))
-	-> \1,\2|\1.\2.	# Tizedestört (AkH. 291.) vagy sorszám?
+	-> \1,\2|\1.\2.	# Tizedestört vagy sorszám? | http://helyesiras.mta.hu/helyesiras/default/akh12#293
 ((\d\d*[.]){2}\d)\b(?![.])
 	# kivéve, ha tulajdonnév előzi meg (pl. Hunspell 1.2.8,
 	<- option("comma") and option("grammar") and not word(-1) or not re.match("[A-Z]", word(-1))
 	-> \1.	# A sorszámot pont követi.
 (\d\d\d+)[.](\d\d)\b(?![.]) <- option("comma")
-	-> \1,\2|\1.\2.	# Tizedestört (AkH. 291.) vagy sorszám?
+	-> \1,\2|\1.\2.	# Tizedestört vagy sorszám? | http://helyesiras.mta.hu/helyesiras/default/akh12#293
 # 25.30˚, de 10.20-kor -> 25,30˚, de 10.20-kor
 # 1.5 -> 1,5|1.5.
 # 123.5 -> 123,5|123.5.
@@ -202,9 +203,9 @@ dn \d{3}(,\w+)?[%‰‱°]?(-\w+)? # 3 számjegy, toldalékkal is
 
 -(\d+([  ]\d\d\d){0,3}(,\d+)?[%‰‱°]?(-\w+)?) <- option("minus") -> −\1 # Mínuszjel kiskötőjel helyett.
 
--(\d+([  ]\d\d\d){0,3})[.](\d+[%‰‱°]?(-\w+)?) <- option("minus") -> −\1,\2 # Mínuszjel és tizedesvessző. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#291.
+-(\d+([  ]\d\d\d){0,3})[.](\d+[%‰‱°]?(-\w+)?) <- option("minus") -> −\1,\2 # Mínuszjel és tizedesvessző. | http://helyesiras.mta.hu/helyesiras/default/akh12#293
 
-(−\d+([  ]\d\d\d){0,3})[.](\d+[%‰‱°]?(-\w+)?) -> \1,\2 # Tizedesvessző pont helyett. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#291.
+(−\d+([  ]\d\d\d){0,3})[.](\d+[%‰‱°]?(-\w+)?) -> \1,\2 # Tizedesvessző pont helyett. | http://helyesiras.mta.hu/helyesiras/default/akh12#293
 
 
 ######################## fok #########################
@@ -213,7 +214,7 @@ dn \d{3}(,\w+)?[%‰‱°]?(-\w+)? # 3 számjegy, toldalékkal is
 
 # 12°-kal
 
-([-−]?\d+(?:,\d+)?)[  ](°(-\w+)) -> \1\2	# Szóköz nélkül tapadó írásjel (AkH. 239.)
+([-−]?\d+(?:,\d+)?)[  ](°(-\w+)) -> \1\2	# Szóköz nélkül tapadó írásjel | http://helyesiras.mta.hu/helyesiras/default/akh12#240
 
 # 12 °C-kal
 
@@ -241,25 +242,25 @@ notmonthposs (|[^-–jaáeé][a-zöüóűőúéáí]*)
 notmonthcomp [-–]{month}{notmonthposs}
 
 # XXX: sentence boundary modification
-\b{year}[.] {Month}\b -> = {year} + ". " + {Month}.lower() # A hónap nevét kisbetűvel írjuk. (AkH. 144.)
+\b{year}[.] {Month}\b -> = {year} + ". " + {Month}.lower() # A hónap nevét kisbetűvel írjuk. | http://helyesiras.mta.hu/helyesiras/default/akh12#296
 
 year2    \d\d
 
-{year} {month}{notmonthposs} -> {year}. {month}{notmonthposs}	# Az évszám után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#294.
-{year} {month}{notmonthcomp} -> {year}. {month}{notmonthcomp}	# Az évszám után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#294.
-{year} évi -> {year}. évi	# Az évszám után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#294.
-{year}[-–]{year2} évi -> {year}–{year2}. évi	# Az évszám után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#294.
+{year} {month}{notmonthposs} -> {year}. {month}{notmonthposs}	# Az évszám után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#296
+{year} {month}{notmonthcomp} -> {year}. {month}{notmonthcomp}	# Az évszám után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#296
+{year} évi -> {year}. évi	# Az évszám után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#296
+{year}[-–]{year2} évi -> {year}–{year2}. évi	# Az évszám után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#296
 # 2005 január -> 2005. január
 # 1999 augusztusban -> 1999. augusztusban
 # 2009-10 évi -> 2009–10. évi
 
 nu folyamán|előtti?|utáni?|közötti?|nyara|nyará\w+|tele|telé\w+|tavasza|tavaszá\w+|ősze|őszé\w+
-\b{year}[.] {nu}\b -> {year} \g<nu> # Az évszám után itt nem írunk pontot. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#295.
+\b{year}[.] {nu}\b -> {year} \g<nu> # Az évszám után itt nem írunk pontot. | http://helyesiras.mta.hu/helyesiras/default/akh12#297
 # 1974. előtti -> 1974 előtti
 
 monthposs ([jaáe]|é\w)\w*
 
-\b{year}[.] {month}{monthposs}\b -> {year} {month}{monthposs} # Az évszám után itt nem írunk pontot. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#295.
+\b{year}[.] {month}{monthposs}\b -> {year} {month}{monthposs} # Az évszám után itt nem írunk pontot. | http://helyesiras.mta.hu/helyesiras/default/akh12#297
 # 1999. augusztusában -> 1999 augusztusában
 
 [char]
@@ -269,31 +270,31 @@ text [^\s][^\s]*
 w \w*
 djel [ ,;:?!]
 
-(?i)\b{month} {day}[.]-{w} -> {month} {day}-{w} # A nap után itt nem írunk pontot. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#296.
-(?i)\b{month} {day}{djel} -> {month} {day}.{djel} # Ha dátum, hiányzik a pont. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#296.
+(?i)\b{month} {day}[.]-{w} -> {month} {day}-{w} # A nap után itt nem írunk pontot. | http://helyesiras.mta.hu/helyesiras/default/akh12#298
+(?i)\b{month} {day}{djel} -> {month} {day}.{djel} # Ha dátum, hiányzik a pont. | http://helyesiras.mta.hu/helyesiras/default/akh12#295
 # március 15.-én -> március 15-én
 # március 15 volt. -> március 15. volt.
 
 
 nu óta|előtti?|utáni?|közötti?
-(?i)\b{month} {day} {nu} -> {month} {day}. {nu} # A nap után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#297.
+(?i)\b{month} {day} {nu} -> {month} {day}. {nu} # A nap után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#299
 # március 15 óta -> március 15. óta
-(?i)\b{month} {day}[.] és {day} {nu} -> {month} {day}. és {day}. {nu} # A nap után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#297.
-(?i)\b{month} {day} és {day}[.]? {nu} -> {month} {day}. és {day}. {nu} # A nap után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#297.
+(?i)\b{month} {day}[.] és {day} {nu} -> {month} {day}. és {day}. {nu} # A nap után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#299
+(?i)\b{month} {day} és {day}[.]? {nu} -> {month} {day}. és {day}. {nu} # A nap után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#299
 # március 15. és 27 között -> március 15. és 27. között
 # március 15 és 27. között -> március 15. és 27. között
 # március 15 és 27 között -> március 15. és 27. között
-(?i)\b{month} {day}[-–]{day} {nu} -> {month} {day}–{day}. {nu} # A nap után itt pontot írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#297.
-(?i)\b{month} {day}-{day}. {nu} -> {month} {day}–{day}. {nu} # A napok közé nagykötőjelet írunk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#297.
+(?i)\b{month} {day}[-–]{day} {nu} -> {month} {day}–{day}. {nu} # A nap után itt pontot írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#299
+(?i)\b{month} {day}-{day}. {nu} -> {month} {day}–{day}. {nu} # A napok közé nagykötőjelet írunk. | http://helyesiras.mta.hu/helyesiras/default/akh12#299
 # március 15-22. között -> március 15–22. között
 # március 15-22 között -> március 15–22. között
 
-\b{year}[.]{monthnum}[.]{day}{optdot}{text} -> {year}. {monthnum}. {day}{optdot}{text} # Szóköz a dátumban. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#293.
+\b{year}[.]{monthnum}[.]{day}{optdot}{text} -> {year}. {monthnum}. {day}{optdot}{text} # Szóköz a dátumban. | http://helyesiras.mta.hu/helyesiras/default/akh12#295
 # 2009.05.12. -> 2009. 05. 12.
 
 # 1. = elseje
 e  e|i|ei\w*|é\w+
-(?i){month} 1[.]?-{e}\b -> {month} 1-j{e} # Elseje számjegyes írása. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#296.
+(?i){month} 1[.]?-{e}\b -> {month} 1-j{e} # Elseje számjegyes írása. | http://helyesiras.mta.hu/helyesiras/default/akh12#298
 # május 1-i -> május 1-ji
 # május 1-ei -> május 1-jei
 # május 1-én -> május 1-jén
@@ -304,8 +305,8 @@ e  e|i|ei\w*|é\w+
 
 #W \w+		# word
 # tagmondatok és mondatrészek megkülönböztetéséhez mondatelemzés kell
-#([(]|\w+: )(({W}, )+{W};( {W}[,;])* {W})[,]? stb. -> \1\2; stb.	# Stb. előtt itt pontosvessző van. (AkH. 247/b) | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#247.
-#([(]|\w+: )(({W}, )*{W}), stb. -> \1\2 stb.	# Stb. előtt itt nincs vessző. (AkH. 247/d) | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#247.
+#([(]|\w+: )(({W}, )+{W};( {W}[,;])* {W})[,]? stb. -> \1\2; stb.	# Stb. előtt itt pontosvessző van. | http://helyesiras.mta.hu/helyesiras/default/akh12#248b
+#([(]|\w+: )(({W}, )*{W}), stb. -> \1\2 stb.	# Stb. előtt itt nincs vessző. | http://helyesiras.mta.hu/helyesiras/default/akh12#248d
 \bstb[.], stb[.] -> stb. stb.|stb.; stb.	# Két stb. közé nem teszünk vesszőt.
 ## Madarak: rigó, cinke, veréb, stb. -> Madarak: rigó, cinke, veréb stb.
 ## Állatok (rigó, cinke; nyúl, pocok stb.) -> Állatok (rigó, cinke; nyúl, pocok; stb.)
@@ -335,17 +336,17 @@ year2 (1\d\d[1-9]|1\d[1-9]\d|20\d[1-9]|20[1-9]\d)
 # 1998-2000 -> 1998–2000
 # 1998-99 -> 1998–99
 
-([A-ZÖÜÓŰŐÚÉÁÍ]\w*)-(\d+(-\w+)?) -> \1–\2 # Típusnév és -szám közé nagykötőjelet teszünk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#263.
+([A-ZÖÜÓŰŐÚÉÁÍ]\w*)-(\d+(-\w+)?) -> \1–\2 # Típusnév és -szám közé nagykötőjelet teszünk. | http://helyesiras.mta.hu/helyesiras/default/akh12#294
 # UTF-8 -> UTF–8
 # Apolló-13-nak -> Apolló–13-nak
 
-pp[.] (\d+)-(\d+)[.] -> pp. \1–\2.		# Oldalszámok közé nagykötőjelet teszünk. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#263.
-(\d+)-(\d+)[.] (o[.]|oldal\w*) -> \1–\2. \3	# Oldalszám
+pp[.] (\d+)-(\d+)[.] -> pp. \1–\2.		# Oldalszámok közé nagykötőjelet teszünk. | http://helyesiras.mta.hu/helyesiras/default/akh12#264c
+(\d+)-(\d+)[.] (o[.]|oldal\w*) -> \1–\2. \3	# Oldalszámok közé nagykötőjelet teszünk. | http://helyesiras.mta.hu/helyesiras/default/akh12#264c
 # 10-12. oldalon -> 10–12. oldalon
 
 " (u[.]|utca|út|tér) (\d\d*)-(\d\d*)[.]" -> " \1 \2–\3."  # Nagykötőjel a házszámban. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Egyéb_tudnivalók#298.
 # Széna tér 123-125. -> Széna tér 123–125.
-
+# Ezt a szabályt kidobták a 12-ből!
 
 ###################### helyesírás ####################
 
@@ -397,7 +398,7 @@ továbbittunk -> továbbítunk|tovább ittunk	# Helyesírási hiba.
 [char]
 
 # Mivel az "un." rövidítésként szerepel az OpenOffice.org-ban, nagybetűs folytatás esetén nem húzzuk alá
-\bun[.] <- word(1) and not re.match(u"[A-ZÖÜÓŰŐÚÉÁÍ]", word(1)) -> ún. # Úgy nevezett rövidítése ún. (AkH. 282.)
+\bun[.] <- word(1) and not re.match(u"[A-ZÖÜÓŰŐÚÉÁÍ]", word(1)) -> ún. # Úgy nevezett rövidítése ún. | http://helyesiras.mta.hu/helyesiras/default/akh12#284
 (?i)\bvíz(hang\w*)\b -> vissz\1				# Szótévesztés?
 
 #################### nyelvtani szabályok ##################
@@ -426,7 +427,7 @@ az <- option("grammar") and word(1) and
 # g = gramm
 
 num \d+|\d+,\d+
-{num} gr[.]?-mal -> {num} g-mal # grammal rövidítése g-mal (AkH. 286.)
+{num} gr[.]?-mal -> {num} g-mal # A grammal rövidítése g-mal | http://helyesiras.mta.hu/helyesiras/default/akh12#288
 # 25 gr-mal -> 25 g-mal
 # 25,2 gr.-mal -> 25,2 g-mal
 
@@ -467,7 +468,7 @@ hw [a-zA-ZöüóűőúéáíÖÜÓŰŐÚÉÁÍ][a-zA-ZöüóűőúéáíÖÜÓŰ
 [word]
 
 event (Advent|Húsvét|Karácsony|Mindenszentek|Pünkösd|(Anyák|Apák|Halottak|Nők) [Nn]apj){abc}+
-{event} <- word(-1) and word(1) == word(1).lower() -> = {event}.lower() # Kisbetűs kifejezés, ha nem cím. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_kis_és_a_nagy_kezdőbetűk#145.
+{event} <- word(-1) and word(1) == word(1).lower() -> = {event}.lower() # Kisbetűs kifejezés, ha nem cím. | http://helyesiras.mta.hu/helyesiras/default/akh12#144
 # Nemsokára Anyák napja. -> Nemsokára anyák napja.
 
 [char]
@@ -483,69 +484,69 @@ foci ([Ev])[bB]{kw} -> foci-\1b{kw} # Kötőjeles kifejezés.
 
 [Word]
 
-alig alig 	-> alig-alig 	# Kötőjeles szókettőzés. (AkH. 97.)
-ki ki 		-> ki-ki 	# Kötőjeles szókettőzés. (AkH. 97.)
-is is 		-> is-is 	# Kötőjeles szókettőzés. (AkH. 97.)
-kinek kinek 	-> kinek-kinek 	# Kötőjeles szókettőzés. (AkH. 97.)
-körbe körbe	-> körbe-körbe	# Kötőjeles szókettőzés. (AkH. 97.)
-közbe közbe	-> közbe-közbe	# Kötőjeles szókettőzés. (AkH. 97.)
-külön külön	-> külön-külön	# Kötőjeles szókettőzés. (AkH. 97.)
-már már		-> már-már	# Kötőjeles szókettőzés. (AkH. 97.)
-más más		-> más-más	# Kötőjeles szókettőzés. (AkH. 97.)
-messze messze	-> messze-messze # Kötőjeles szókettőzés. (AkH. 97.)
-nagyon nagyon	-> nagyon-nagyon # Kötőjeles szókettőzés. (AkH. 97.)
-néha néha	-> néha-néha	# Kötőjeles szókettőzés. (AkH. 97.)
-olykor olykor	-> olykor-olykor # Kötőjeles szókettőzés. (AkH. 97.)
-túl túl		-> túl-túl	# Kötőjeles szókettőzés. (AkH. 97.)
-sok sok		-> sok-sok	# Kötőjeles szókettőzés. (AkH. 97.)
-úgy úgy		-> úgy-úgy	# Kötőjeles szókettőzés. (AkH. 97.)
+alig alig 	-> alig-alig 	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+ki ki 		-> ki-ki 	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+is is 		-> is-is 	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+kinek kinek 	-> kinek-kinek 	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+körbe körbe	-> körbe-körbe	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+közbe közbe	-> közbe-közbe	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+külön külön	-> külön-külön	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+már már		-> már-már	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+más más		-> más-más	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+messze messze	-> messze-messze # Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+nagyon nagyon	-> nagyon-nagyon # Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+néha néha	-> néha-néha	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+olykor olykor	-> olykor-olykor # Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+túl túl		-> túl-túl	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+sok sok		-> sok-sok	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
+úgy úgy		-> úgy-úgy	# Kötőjeles szókettőzés. | http://helyesiras.mta.hu/helyesiras/default/akh12#97
 
-csip csup 	-> csip-csup	# Kötőjeles ikerszó. (AkH. 103.)
-éhen szomjan	-> éhen-szomjan	# Mellérendelő szókapcsolat. (AkH. 100.)
-ingó bingó	-> ingó-bingó	# Kötőjeles ikerszó. (AkH. 103.)
-sebbel lobbal	-> sebbel-lobbal # Mellérendelő szókapcsolat. (AkH. 100.)
-szegről végről	-> szegről-végről # Mellérendelő szókapcsolat. (AkH. 100.)
-széltében hosszában -> széltében-hosszában # Mellérendelő szókapcsolat. (AkH. 100.)
-szőröstül bőröstül -> szőröstül-bőröstül # Mellérendelő szókapcsolat. (AkH. 100.)
-szőrén szálán -> szőrén-szálán # Mellérendelő szókapcsolat. (AkH. 100.)
-télen nyáron	-> télen-nyáron	# Mellérendelő szókapcsolat. (AkH. 100.)
-testestől lelkestől -> testestől-lelkestől # Mellérendelő szókapcsolat. (AkH. 100.)
-testestül lelkestül -> testestül-lelkestül # Mellérendelő szókapcsolat. (AkH. 100.)
-többé kevésbé	-> többé-kevésbé # Mellérendelő szókapcsolat. (AkH. 100.)
-törik szakad	-> törik-szakad	# Mellérendelő szókapcsolat. (AkH. 100.)
-tűzön vízen	-> tűzön-vízen	# Mellérendelő szókapcsolat. (AkH. 100.)
-tűzzel vassal	-> tűzzel-vassal # Mellérendelő szókapcsolat. (AkH. 100.)
-véges végig	-> véges-végig	# Mellérendelő szókapcsolat. (AkH. 100.)
-tüskén bokron	-> tüskén-bokron # Mellérendelő szókapcsolat. (AkH. 100.)
-végre valahára	-> végre-valahára # Mellérendelő szókapcsolat. (AkH. 100.)
-imígy amúgy	-> imígy-amúgy	# Mellérendelő szókapcsolat. (AkH. 100.)
-innen onnan	-> innen-onnan	# Mellérendelő szókapcsolat. (AkH. 100.)
-itt ott		-> itt-ott	# Mellérendelő szókapcsolat. (AkH. 100.)
-ízig vérig	-> ízig-vérig	# Mellérendelő szókapcsolat. (AkH. 100.)
-ízzé porrá	-> ízzé-porrá	# Mellérendelő szókapcsolat. (AkH. 100.)
-jajjal bajjal	-> jajjal-bajjal # Mellérendelő szókapcsolat. (AkH. 100.)
-jóban rosszban	-> jóban-rosszban # Mellérendelő szókapcsolat. (AkH. 100.)
-jobbra balra	-> jobbra-balra # Mellérendelő szókapcsolat. (AkH. 100.)
-jól rosszul	-> jól-rosszul	# Mellérendelő szókapcsolat. (AkH. 100.)
-kékre zöldre	-> kékre-zöldre # Mellérendelő szókapcsolat. (AkH. 100.)
-kénytelen kelletlen -> kénytelen-kelletlen # Mellérendelő szókapcsolat. (AkH. 100.)
-kézen közön	-> kézen-közön	# Mellérendelő szókapcsolat. (AkH. 100.)
-körös körül	-> körös-körül	# Mellérendelő szókapcsolat. (AkH. 100.)
-kézzel lábbal	-> kézzel-lábbal # Mellérendelő szókapcsolat. (AkH. 100.)
-kurtán furcsán	-> kurtán-furcsán # Mellérendelő szókapcsolat. (AkH. 100.)
-lépten nyomon	-> lépten-nyomon # Mellérendelő szókapcsolat. (AkH. 100.)
-menet jövet 	-> menet-jövet	# Mellérendelő szókapcsolat. (AkH. 100.)
-nyakra főre	-> nyakra-főre	# Mellérendelő szókapcsolat. (AkH. 100.)
-örökkön örökké 	-> örökkön-örökké # Mellérendelő szókapcsolat. (AkH. 100.)
-sülve főve	-> sülve-főve	# Mellérendelő szókapcsolat. (AkH. 100.)
-úton útfélen	-> úton-útfélen # Mellérendelő szókapcsolat. (AkH. 100.)
-üggyel bajjal	-> üggyel-bajjal # Mellérendelő szókapcsolat. (AkH. 100.)
+csip csup 	-> csip-csup	# Kötőjeles ikerszó. | http://helyesiras.mta.hu/helyesiras/default/akh12#104
+éhen szomjan	-> éhen-szomjan	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+ingó bingó	-> ingó-bingó	# Kötőjeles ikerszó. | http://helyesiras.mta.hu/helyesiras/default/akh12#104
+sebbel lobbal	-> sebbel-lobbal # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+szegről végről	-> szegről-végről # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+széltében hosszában -> széltében-hosszában # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+szőröstül bőröstül -> szőröstül-bőröstül # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+szőrén szálán -> szőrén-szálán # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+télen nyáron	-> télen-nyáron	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+testestől lelkestől -> testestől-lelkestől # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+testestül lelkestül -> testestül-lelkestül # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+többé kevésbé	-> többé-kevésbé # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+törik szakad	-> törik-szakad	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+tűzön vízen	-> tűzön-vízen	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+tűzzel vassal	-> tűzzel-vassal # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+véges végig	-> véges-végig	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+tüskén bokron	-> tüskén-bokron # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+végre valahára	-> végre-valahára # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+imígy amúgy	-> imígy-amúgy	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+innen onnan	-> innen-onnan	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+itt ott		-> itt-ott	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+ízig vérig	-> ízig-vérig	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+ízzé porrá	-> ízzé-porrá	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+jajjal bajjal	-> jajjal-bajjal # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+jóban rosszban	-> jóban-rosszban # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+jobbra balra	-> jobbra-balra # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+jól rosszul	-> jól-rosszul	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+kékre zöldre	-> kékre-zöldre # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+kénytelen kelletlen -> kénytelen-kelletlen # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+kézen közön	-> kézen-közön	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+körös körül	-> körös-körül	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+kézzel lábbal	-> kézzel-lábbal # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+kurtán furcsán	-> kurtán-furcsán # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+lépten nyomon	-> lépten-nyomon # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+menet jövet 	-> menet-jövet	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+nyakra főre	-> nyakra-főre	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+örökkön örökké 	-> örökkön-örökké # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+sülve főve	-> sülve-főve	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+úton útfélen	-> úton-útfélen # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+üggyel bajjal	-> üggyel-bajjal # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
 # alig alig -> alig-alig
 # Úgy úgy -> Úgy-úgy
 
 # ágat-bogat
 
-(ág\w*) (bog\w*) <- stem(\1) == [u"ág"] and stem(\2) == ["bog"] -> \1-\2 # Kötőjeles ikerszó. (AkH. 103.)
+(ág\w*) (bog\w*) <- stem(\1) == [u"ág"] and stem(\2) == ["bog"] -> \1-\2 # Kötőjeles ikerszó. | http://helyesiras.mta.hu/helyesiras/default/akh12#104
 
 ###################### Földrajzi nevek ######################
 
@@ -563,48 +564,49 @@ w   {Abc}+
 
 # Észak-Amerikai Észak-amerikai helyett
 
-{Dir}-{cap} <- morph({cap}, r"po:noun_prs.*is:i_PLACE", False) -> = {Dir} + "-" + {cap}.lower() # Kisbetűvel írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#179.
+{Dir}-{cap} <- morph({cap}, r"po:noun_prs.*is:i_PLACE", False) -> = {Dir} + "-" + {cap}.lower() # Kisbetűvel írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#178
 
 # észak-Amerika Észak-Amerika helyett
 
 {dir}-{cap} <- morph({cap}, r"po:noun_prs", False) and not morph({cap},"is:i_PLACE", False) ->
-	= {dir}.capitalize() + "-" + {cap} # Nagybetűvel írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#179.
+	= {dir}.capitalize() + "-" + {cap} # Nagybetűvel írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#178
 
 # Észak-amerikai csak akkor nagybetűs, ha mondatkezdő és nem nagybetűs az utána jövő szó
 
 {Dir}-{sc} <- word(-1) and word(1) and not word(1) == word(1).capitalize() and
-	morph({sc}, r"po:noun_prs.*is:i_PLACE", False) -> = {Dir}.lower() + "-" + {sc} # Kisbetűvel írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#179.
+	morph({sc}, r"po:noun_prs.*is:i_PLACE", False) -> = {Dir}.lower() + "-" + {sc} # Kisbetűvel írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#178
 
 # hiányzó kötőjel
 
-{Dir} {w} <- morph({w}, r"po:noun_prs") -> {Dir}-{w} # Kötőjellel írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#179.
+{Dir} {w} <- morph({w}, r"po:noun_prs") -> {Dir}-{w} # Kötőjellel írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#178
 
 # köznevek
 
 prop Tenger|Óceán|Sziget|Félsziget|Középhegység
 
-{cap}-{prop} -> = {cap} + "-" + {prop}.lower() # Kisbetűs írt köznévi tag. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#176. 
+{cap}-{prop} -> = {cap} + "-" + {prop}.lower() # Kisbetűsen írt köznévi tag. | http://helyesiras.mta.hu/helyesiras/default/akh12#175
+
+# AkH. 181.
+
+(Árpád|Erzsébet|Hajógyári|Margit|Megyeri|Petőfi|Rákóczi|Szabadság)-(híd\w*) -> \1 \2 # Különírás. | http://helyesiras.mta.hu/helyesiras/default/akh12#181
+(Szabadság)(híd\w*) -> \1 \2 # Különírás. | http://helyesiras.mta.hu/helyesiras/default/akh12#181
+(Szabadság ?)(szobo?r\w*) -> \1-\2 # Kötőjeles összetétel. | http://helyesiras.mta.hu/helyesiras/default/akh12#166
 
 # AkH. 182.
 
-(Árpád|Erzsébet|Hajógyári|Margit|Megyeri|Petőfi|Rákóczi|Szabadság)-(híd\w*) -> \1 \2 # Különírás. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#182.
-(Szabadság)(híd\w*) -> \1 \2 # Különírás. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#182.
-(Szabadság ?)(szobo?r\w*) -> \1-\2 # Kötőjeles összetétel. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A különírás és az egybeírás#140.
-
-# AkH. 183.
-
-(Fertő)-(([tT]ó|[tT]av)\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#183.
-(Góbi|Kalahári|Szahara)-([sS]ivatag\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#183.
-(Börzsöny|Bükk|Mátra|Mecsek|Pilis|Zemplén|Vértes)-([Hh]egység\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#183.
-(Duna)-(folyam\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#183.
-(Bodrog|Duna|Dráva|Ipoly|Körös|Maros|Rába|Sajó|Tisza|Zala)-(([Ff]olyó|[Ff]olyam)\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/A_tulajdonnevek_írása#183.
+(Fertő)-(([tT]ó|[tT]av)\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#182
+(Góbi|Kalahári|Szahara)-([sS]ivatag\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#182
+(Börzsöny|Bükk|Mátra|Mecsek|Pilis|Zemplén|Vértes)-([Hh]egység\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#182
+(Duna)-(folyam\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#182
+(Bodrog|Duna|Dráva|Ipoly|Körös|Maros|Rába|Sajó|Tisza|Zala)-(([Ff]olyó|[Ff]olyam)\w*) -> = \1 + " " + \2.lower() # Kötőjel nélkül írt földrajzi név. | http://helyesiras.mta.hu/helyesiras/default/akh12#182
 
 Budapest (Liszt Ferenc )([Nn]emzetközi [Rr]epülőt[eé])(r\w*) -> =
 	\1 + \2.lower() + \3 +
 	"|ferihegyi " + \1 + \2.lower() + \3 + "|" +
 	\3.replace("r", "Ferihegy", 1).replace("gyrel", "ggyel").replace(u"gyré", u"ggyé") +
 	"|Budapest, " + \1 + \2.lower() + \3
-	# A köznévi tag kisbetűs, a címet vesszővel tagoljuk. (AkH. 190., 247.; FNB 74.) | http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#247.
+	# A köznévi tag kisbetűs, a címet vesszővel tagoljuk. (AkH. 190., 248.; FNB 74.) | http://helyesiras.mta.hu/helyesiras/default/akh12#248
+# FIXME mi az az FNB? és vajon meg lehetne itt adni több magyarázó linket? egyelőre marad, de az AkH.-ozást innen is kiirtanám
 
 ########################## vesszők ##########################
 
@@ -719,7 +721,7 @@ több, mint <-
 	# több mint 75%-a
 	re.match(r"\d+%-", word(1)) -> több mint # Ha nem összehasonlítás,
 	hanem a mondanivaló erősítése, itt nem használunk vesszőt. |
-	http://hu.wikisource.org/wiki/A_magyar_helyesírás_szabályai/Az_írásjelek#243.
+	http://helyesiras.mta.hu/helyesiras/default/akh12#244
 
 ############ avagy, illetve, ill., valamint ##########
 
