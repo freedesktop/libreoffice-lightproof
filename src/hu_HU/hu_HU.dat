@@ -372,13 +372,19 @@ egyi(vású\w*) -> egyí\1				# Hosszú í-vel helyes.
 egytől-egyig -> egytől egyig			# Kötőjel nélkül írjuk.
 előre hátra -> előre-hátra			# Kötőjellel írjuk.
 előre láthatólag -> előreláthatólag		# Egybeírás.
-email: -> e-mail:				# e-mail (elektronikus levél)
-email-lel -> e-maillel				# e-mail (elektronikus levél)
-e(mail[ -]|-mail-|-mail)(cím\w*) -> e-mail \2	# Helyesen e-mail cím.
+email: -> ímél:\ne-mail:				# ímél vagy e-mail (elektronikus levél)
+email-lel -> íméllel\ne-maillel				# ímél vagy e-mail (elektronikus levél)
+e(mail[ -]|-mail |-mail)(cím\w*) -> ímél\2\ne-mail-\2	# Helyesen ímélcím vagy e-mail-cím. | http://helyesiras.mta.hu/helyesiras/default/akh12#140
 ex[- ](\w+) <- spell("ex" + \1) -> ex\1		# Egybeírás.
 figyelemre(méltó\w*) <- word(-1) != "igen" -> figyelemre \1 # Különírás (kivéve: „igen figyelemreméltó”).
 igen figyelemre (méltó\w*) -> igen figyelemre\1 # Egybeírás.
-(állat|csepp|csillag|ék|ellipszis|ember|félgömb|félkör|gáz|gömb|gúla|harang|háromszög|hasáb|hatszög|henger|kagyló|kereszt|kocka|korong|kör|körte|kúp|négyszög|négyzet|nyereg|patkó|piramis|piskóta|szivar|tojás|tölcsér|trapéz|vese)(formájú|alakú) -> \1 \2 # Különírás.
+(állat|csepp|csillag|ék|ellipszis|ember|félgömb|félkör|gáz|gömb|gúla|harang|háromszög|hasáb|hatszög|henger|kagyló|kereszt|kocka|korong|kör|körte|kúp|négyszög|négyzet|nyereg|patkó|piramis|piskóta|szivar|tojás|tölcsér|trapéz|vese)-?(formájú|alakú) -> \1 \2 # Különírás.
+([A-Z])-(formájú\w*|alakú\w*|alakzat\w*) -> \1 \2 # Különírás.
+([A-Z])-(alak\w*) <- stem(\2) == ["alak"] -> \1 \2 # Különírás.
+(x|y) (kromoszóm\w+) -> = \1.upper() + "-" + \2 # Kötőjellel írjuk.
+(x|y|z)-(koordinát\w+|tengel\w+|változó\w*) -> = "!CASE!" + \1.lower() + " " + \2 # Különírás kurzivált változónévvel.
+(X|Y|Z) (koordinát\w+|tengel\w+|változó\w*) -> = "!CASE!" + \1.lower() + " " + \2 # Kisbetűvel írjuk, kurzivált változónévvel.
+x (lábú\w*|szárnyú\w*) -> !CASE!x-\1 # Kötőjellel írjuk.
 fő(irány\w*|közlekedés\w*|szabály\w*|szervező\w*) -> fő \1 # A „fő mű”-höz hasonlóan különírjuk.
 hátba (támadás\w*) -> hátba\1			# Egybeírás. 
 időről-időre -> időről időre			# Különírás.
@@ -394,6 +400,14 @@ originált -> originál|eredeti|bontatlan	# Ha nem tárgyesetben van, „t” n�
 (szén|kén|mangán|nitrogén|ón|titán|tórium)(dioxid\w*) -> \1-\2 # Kötőjeles alak.
 (szén|kén|nitrogén)(monoxid\w*) -> \1-\2	# Kötőjeles alak.
 továbbittunk -> továbbítunk|tovább ittunk	# Helyesírási hiba.
+orleans-i (szűz\w*) <- word(-1) != "New" -> !CASE!orléans-i \1|Orléans-i \1 # Helyesen orléans-i szűz.
+vis (\w+) <- \1[:5] != "maior" -> = "vis " + \1.replace("major", "maior") # Helyesen vis maior.
+
+(árú\w*) <- word(-1).lower() == "az" and stem(\0) == [u"ár"] -> = \0.replace("árú", "áru") # Helyesen áru. | http://helyesiras.mta.hu/helyesiras/default/akh12#23
+
+[word]
+
+([xy]-kromoszóm\w+) -> = \1.capitalize() # Nagybetűvel írjuk.
 
 [char]
 
@@ -442,14 +456,14 @@ hw [a-zA-ZöüóűőúéáíÖÜÓŰŐÚÉÁÍ][a-zA-ZöüóűőúéáíÖÜÓŰ
 ([B-Z]) vitamin{w} -> \1-vitamin{w} # Kötőjeles név.
 ([A-Z])-(vitamin)(\w+) <- morph(\2+\3, "pa:") -> \1-vitamin-\2 # Két kötőjellel írt alak.
 # vitaminhiány külön szerepel a szótárban, ezért szóköz nélkül is javítani kell
-([A-Z])-(vitamin) *(hiány) -> \1-\2-\3 # Két kötőjellel írt alak.
-
+([A-Z])-(vitamin) *((túl)?adagolás|bevitel|felszívódás|forrás|hiány|készítmény|szedés|szükséglet|tartalom) -> \1-\2-\3 # Két kötőjellel írt alak. | http://helyesiras.mta.hu/helyesiras/default/akh12#140
 
 [char]
 
 (?i)\bnyílt szívű{w} -> nyíltszívű{w} # Egybeírás.
 (?i)\bjó szándékú{w} -> jószándékú{w} # Egybeírás.
 (?i)közös lónak túrós -> közös lónak túros # Helyes kifejezés.
+(?i)\blobot vet{w}\b -> lobbot vet{w} # Helyes kifejezés.
 (?i)\bnejlon harisnya\b -> nejlonharisnya # Egybeírás.
 (?i)\boda-vissza{hw} -> oda-vissza {hw} # Különírás.
 (?i)\bpro és kontra\b -> pró és kontra # Helyes latin kifejezés.
@@ -537,7 +551,7 @@ kurtán furcsán	-> kurtán-furcsán # Mellérendelő szókapcsolat. | http://he
 lépten nyomon	-> lépten-nyomon # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
 menet jövet 	-> menet-jövet	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
 nyakra főre	-> nyakra-főre	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
-örökkön örökké 	-> örökkön-örökké # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
+örökkön-örökké 	-> örökkön örökké # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
 sülve főve	-> sülve-főve	# Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
 úton útfélen	-> úton-útfélen # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
 üggyel bajjal	-> üggyel-bajjal # Mellérendelő szókapcsolat. | http://helyesiras.mta.hu/helyesiras/default/akh12#101
@@ -547,6 +561,26 @@ sülve főve	-> sülve-főve	# Mellérendelő szókapcsolat. | http://helyesiras
 # ágat-bogat
 
 (ág\w*) (bog\w*) <- stem(\1) == [u"ág"] and stem(\2) == ["bog"] -> \1-\2 # Kötőjeles ikerszó. | http://helyesiras.mta.hu/helyesiras/default/akh12#104
+
+# idegen
+
+[code]
+
+foreign=["ab ovo", "ars poetica", "casus belli", "categoricus imperativus",
+    "coming out", "cash flow", "circulus vitiosus", "corpus delicti", "de facto", "de jure",
+    "delirium tremens", "doctor honoris causa", "et cetera", "fait accompli", "fixa idea",
+    "horribile dictu", "hot dog", "in flagranti", "in medias res", "in memoriam", "in vitro",
+    "in vivo", "magna cum laude", "mea culpa", "memento mori", "mountain bike", "nota bene",
+    "persona non grata", "plein air", "pro bono", "salto mortale", "status quo", "tabula rasa",
+    "terminus technicus", "vice versa", "vis maior"]
+
+def suggest_foreign(word):
+	return "\n".join([i for i in foreign if word == i.split(" ")[0]]) # Idegen eredetű kifejezésekben előforduló szó.
+
+[word]
+
+(ab|ars|casus|categoricus|coming|cash|circulus|corpus|delirium|doctor|et|fait|fixa|horribile|hot|in|magna|mea|memento|mountain|nota|persona|plein|pro|salto|tabula|vice|vis) (\w+) <- not re.match(u"^(ovo|poetica|belli|imperativus|out|flow|vitiosus|delicti|facto|jure|tremens|honoris|cetera|accompli|idea|ideá|dictu|dog|flagranti|medias|memoriam|vitro|vivo|cum|culpa|mori|bike|bene|non|air|bono|mortal|quo|quó|rasa|rasá|versa|maior)", \2) ->
+	= suggest_foreign(\1) # Idegen eredetű kifejezés?
 
 ###################### Földrajzi nevek ######################
 
@@ -607,6 +641,9 @@ Budapest (Liszt Ferenc )([Nn]emzetközi [Rr]epülőt[eé])(r\w*) -> =
 	"|Budapest, " + \1 + \2.lower() + \3
 	# A köznévi tag kisbetűs, a címet vesszővel tagoljuk. (AkH. 190., 248.; FNB 74.) | http://helyesiras.mta.hu/helyesiras/default/akh12#248
 # FIXME mi az az FNB? és vajon meg lehetne itt adni több magyarázó linket? egyelőre marad, de az AkH.-ozást innen is kiirtanám
+
+([Oo])rlea(ns-?\w*) <- word(-1) != "New" -> \1rléa\2 # Orléans vagy New Orleans.
+New [Oo]rléa(ns-?\w*) -> New Orlea\1 # New Orleans
 
 ########################## vesszők ##########################
 
