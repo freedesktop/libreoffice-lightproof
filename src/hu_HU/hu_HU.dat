@@ -292,14 +292,9 @@ nu óta|előtti?|utáni?|közötti?
 \b{year}[.]{monthnum}[.]{day}{optdot}{text} -> {year}. {monthnum}. {day}{optdot}{text} # Szóköz a dátumban. | http://helyesiras.mta.hu/helyesiras/default/akh12#295
 # 2009.05.12. -> 2009. 05. 12.
 
-# 1. = elseje
-e  e|i|ei\w*|é\w+
-(?i){month} 1[.]?-{e}\b -> {month} 1-j{e} # Elseje számjegyes írása. | http://helyesiras.mta.hu/helyesiras/default/akh12#298
-# május 1-i -> május 1-ji
-# május 1-ei -> május 1-jei
-# május 1-én -> május 1-jén
-# április 1-étől május 1-ig -> április 1-jétől május 1-ig
-
+# Hibás dátum: 1-a, 1-án, 2-e, 2-én, 2-je, 2-jén -> 1-e, 1-én, 2-a, 2-án, 2-a, 2-án, de! but-2-én
+(?<=\s)\b([14579]|10|[12][124579]|31)(-a|-á\w+) <- stem("2" + \2) == ["2"] -> = \1 + \2.replace("a", "e").replace(u"á", u"é").replace(u"ó", u"ő") # Hibás dátum?
+(?<=\s)\b([2368]|[23]0|[12][368])(-j?e|-j?é\w+) <- stem("1" + \2) == ["1"] -> = \1 + \2.replace("j", "").replace("e", "a").replace(u"é", u"á").replace(u"ő", u"ó") # Hibás dátum?
 
 ########################## stb. ######################
 
@@ -362,6 +357,7 @@ ne játs(zunk|zatok|zanak) -> ne játss\1  # Helyesírási hiba.
 álltat -> áltat # Áltat, hiteget értelemben egy l-lel írjuk.
 önáll(tat[óá]\w*) -> önál\1 			# Helyesen egy l-lel.
 belsőséges -> bensőséges|belsőségből készült	# Szótévesztés vagy szójáték?
+b[.] ?ú[.] ?é[.] ?k[.]? -> !CASE!BÚÉK # Helyesen egybeírva.
 dehogy is -> dehogyis				# Egybeírás „egyáltalán nem” jelentésben.
 dehogy nem -> dehogynem				# Egybeírás „de igen” jelentésben.
 dehogyis nem -> dehogyisnem			# Egybeírás „de igen” jelentésben.

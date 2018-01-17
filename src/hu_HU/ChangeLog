@@ -2,6 +2,9 @@
 - AkH. 12. kiadásának megfelelő javítások:
   örökkön-örökké -> örökkön örökké
   e-mail cím -> e-mail-cím vagy ímélcím
+  január 1-e, 1-én is helyes, nemcsak január 1-je, 1-jén
+- hibás dátumok (2-e, 3-e, 4-án stb.) javítása
+  (Vajna Miklós javaslatára)
 - Tesztdokumentum ehhez és az egyéb javításokhoz:
   https://bugs.documentfoundation.org/attachment.cgi?id=139147
   (Hibajegy: https://bugs.documentfoundation.org/show_bug.cgi?id=95024)
