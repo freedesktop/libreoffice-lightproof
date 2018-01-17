@@ -1,3 +1,15 @@
+2018-01-17 Németh László <nemeth@numbertext.org>:
+- AkH. 12. kiadásának megfelelő javítások:
+  örökkön-örökké -> örökkön örökké
+  e-mail cím -> e-mail-cím vagy ímélcím
+- Tesztdokumentum ehhez és az egyéb javításokhoz:
+  https://bugs.documentfoundation.org/attachment.cgi?id=139147
+  (Hibajegy: https://bugs.documentfoundation.org/show_bug.cgi?id=95024)
+
+2016-11-22 Kelemen Gábor <kelemeng@gnome.hu>
+- magyarázatok javítása az AkH 12. kiadásának megfelelően
+- AkH. hibaszám helyett hivatkozás mta.hu-ra
+
 2014-01-20 László Németh <nemeth@numbertext.org>:
 - űlltatok nincs aláhúzva hibaként, csak álltat (OOO-875: OpenScope.org)
 
