@@ -98,6 +98,19 @@ Example:
 
 foobar -> _ # Message
 
+== Avoid automatic capitalization of suggestions ==
+
+Start the suggestion with the character sequence "!CASE!":
+
+Foo -> !CASE!foo # Did you mean:
+
+or in multiple suggestions
+
+Foo -> FOO|!CASE!foo # Did you mean:
+
+(FOO and foo suggestions for the input word "Foo", instead
+of FOO and the capitalized Foo)
+
 == Longer explanations ==
 
 Warning messages can contain optional URLs for longer explanations separated by "|" or "\n":

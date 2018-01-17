@@ -193,8 +193,10 @@ def proofread( nDocId, TEXT, LOCALE, nStartOfSentencePos, nSuggestedSentenceEndP
     return tuple(aErrs)
 
 def cap(a, iscap, rLoc):
-    if iscap:
-        for i in range(0, len(a)):
+    for i in range(0, len(a)):
+        if a[i][0:6] == "!CASE!":
+            a[i] = a[i][6:]
+        elif iscap:
             if a[i][0:1] == "i":
                 if rLoc.Language == "tr" or rLoc.Language == "az":
                     a[i] = u"\u0130" + a[i][1:]
