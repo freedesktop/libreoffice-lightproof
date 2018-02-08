@@ -401,6 +401,38 @@ vis (\w+) <- \1[:5] != "maior" -> = "vis " + \1.replace("major", "maior") # Hely
 
 (árú\w*) <- word(-1).lower() == "az" and stem(\0) == [u"ár"] -> = \0.replace("árú", "áru") # Helyesen áru. | http://helyesiras.mta.hu/helyesiras/default/akh12#23
 
+# a kedvel → a kedvvel
+# a bridzsel → a briddzsel
+# a fájlal → a fájllal
+# a földel → a földdel
+# a nyelvel → a nyelvvel
+# a talpal → a talppal
+# a völgyel → a völggyel
+# a rendel → renddel
+# a lízingel → a lízinggel
+# a sminkel → a sminkkel
+# a cementel → a cementtel
+# a pénzel → a pénzzel
+# a tesztel → a teszttel
+# a bilincsel → a bilinccsel
+# a könyvel → a könyvvel
+# a gipszel → a gipsszel
+# a fércel → a férccel
+# a térdel → a térddel
+# a tervel → a tervvel
+# a tekercsel → a tekerccsel
+# a sarkal → sarkkal
+# a versel → a verssel
+# a kertel → a kerttel
+# a tesztel → a teszttel
+# a szexel → a szexszel
+
+# (szótárhiba miatt morph() False opció, mert pár szó kapcsolók nélkül is szerepel a szótárban még)
+
+([^aeuioöüóőúéáűí]\w*[aeuioöüóőúéáűí])(dv|dzs|jl|l[dpv]|lgy|n[gdktz]|ncs|nyv|psz|r[cdkstv]|rcs|szt|x)[ae]l\b
+	<- word(-1).lower() == "a" and morph(\0, r"po:vrb\b", False) and morph(\0[:-2], r"po:noun\b")
+	-> = re.sub(r"@(.)", "\g<1>\g<1>", re.sub(r"([cdgklptv]..|[cgsz][syz]..|dzs..|(?<=[nr])[sz]..)$", r"@\g<1>", \0)).replace("xel", "xszel") # Névszóként -val/-vel toldalékkal. | http://helyesiras.mta.hu/helyesiras/default/akh12#42
+
 [word]
 
 ([xy]-kromoszóm\w+) -> = \1.capitalize() # Nagybetűvel írjuk.
