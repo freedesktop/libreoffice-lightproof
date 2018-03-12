@@ -293,7 +293,8 @@ nu óta|előtti?|utáni?|közötti?
 # 2009.05.12. -> 2009. 05. 12.
 
 # Hibás dátum: 1-a, 1-án, 2-e, 2-én, 2-je, 2-jén -> 1-e, 1-én, 2-a, 2-án, 2-a, 2-án, de! but-2-én
-(?<=\s)\b([14579]|10|[12][124579]|31)(-a|-á\w+) <- stem("2" + \2) == ["2"] -> = \1 + \2.replace("a", "e").replace(u"á", u"é").replace("o", "e").replace(u"ó", u"ő") # Hibás dátum?
+(?<=\s)\b([14579]|10|[12][124579]|31)(-a|-á\w+) <- stem("2" + \2) == ["2"] -> = \1 + \2.translate(str.maketrans(u"aáoó", u"eéeő")) # Hibás dátum?
+
 (?<=\s)\b([2368]|[23]0|[12][368])(-j?e|-j?é\w+) <- stem("1" + \2) == ["1"] -> = \1 + \2.replace("j", "").replace("e", "a").replace("haz", "hoz").replace(u"é", u"á").replace(u"ő", u"ó") # Hibás dátum?
 
 ########################## stb. ######################
@@ -741,24 +742,56 @@ főké(p|pen) <- word(-1) != "a" and word(-1) != "A"
 
 [char]
 
+# 1-gyel, 2-vel, 3-mal, 4-gyel, 5-tel, 6-tal, 7-tel, 8-cal, 9-cel, 10-zel
+# 20-szal, 30-cal, 40-nel, 50-nel, 60-nal, 70-nel, 80-nal, 90-nel, 100-zal
+# 1000-rel, 1000000-val
+
 \b0-á(\w+) -> 0-\1 # Hibás toldalék?
-(\d*[14])-el\b -> \1-gyel # Hibás toldalék?
-(\d*2)-ő(\w+) -> \1-\2 # Hibás toldalék?
-(\d*3)-á\b -> \1-má # Hibás toldalék?
-(\d*3)-al\b -> \1-mal # Hibás toldalék?
-(\d*[57])-el\b -> \1-tel # Hibás toldalék?
-(\d*6)-á\b -> \1-tá # Hibás toldalék?
-(\d*8)-á\b -> \1-cá # Hibás toldalék?
-(\d*9)-el\b -> \1-cel # Hibás toldalék?
-(\d*10)-el\b -> \1-zel # Hibás toldalék?
-(\d*20)-á\b -> \1-szá # Hibás toldalék?
-(\d*30)-á\b -> \1-cá # Hibás toldalék?
-(\d*[4579]0)-el\b -> \1-nel # Hibás toldalék?
-(\d*[68]0)-á\b -> \1-ná # Hibás toldalék?
-\b(\d)00-á\b <- \1 != "0" -> \100-zá # Hibás toldalék?
-\b(\d)000-el\b <- \1 != "0" -> \1000-rel # Hibás toldalék?
-#(\d*\d)0000-el\b <- \1 != "0" -> \1\2000-rel # Hibás toldalék?
-#(\d*)(\d)00000-el\b <- \1 != "0" -> \1\2000-rel # Hibás toldalék?
+([[\(]?\d*[14][\)\]]?)-([^g]|sz)?[ae]l\b -> \1-gyel # Hibás toldalék?
+([[\(]?\d*2[\)\]]?)-ő -> \1 # Hibás toldalék?
+([[\(]?\d*2[\)\]]?)-ő(\w+) -> \1-\2 # Hibás toldalék?
+([[\(]?\d*2[\)\]]?)-([^v]|gy|sz)?[ae]l\b -> \1-vel # Hibás toldalék?
+([[\(]?\d*3[\)\]]?)-á\b -> \1-má # Hibás toldalék?
+([[\(]?\d*3[\)\]]?)-([^m]|gy|sz)?[ae]l\b -> \1-mal # Hibás toldalék?
+([[\(]?\d*[57][\)\]]?)-([^t]|gy|sz)?[ae]l\b -> \1-tel # Hibás toldalék?
+([[\(]?\d*[6][\)\]]?)-([^t]|gy|sz)?[ae]l\b -> \1-tal # Hibás toldalék?
+([[\(]?\d*6[\)\]]?)-á\b -> \1-tá # Hibás toldalék?
+([[\(]?\d*8[\)\]]?)-á\b -> \1-cá # Hibás toldalék?
+([[\(]?\d*(8|30)[\)\]]?)-([^c]|gy|sz)?[ae]l\b -> \1-cal # Hibás toldalék?
+([[\(]?\d*9[\)\]]?)-([^c]|gy|sz)?[ae]l\b -> \1-cel # Hibás toldalék?
+([[\(]?\d*10[\)\]]?)-([^z]|gy|sz)?[ae]l\b -> \1-zel # Hibás toldalék?
+([[\(]?\d*20[\)\]]?)-á\b -> \1-szá # Hibás toldalék?
+([[\(]?\d*20[\)\]]?)-([^z]|gy)?[ae]l\b -> \1-szal # Hibás toldalék?
+([[\(]?\d*30[\)\]]?)-á\b -> \1-cá # Hibás toldalék?
+([[\(]?\d*[4579]0[\)\]]?)-([^n]|gy|sz)?[ae]l\b -> \1-nel # Hibás toldalék?
+([[\(]?\d*[68]0[\)\]]?)-([^n]|gy|sz)?[ae]l\b -> \1-nal # Hibás toldalék?
+([[\(]?\d*[68]0[\)\]]?)-á\b -> \1-ná # Hibás toldalék?
+\b([[\(]?(\d)00[\)\]]?)-á\b <- \2 != "0" -> \1-zá # Hibás toldalék?
+\b([[\(]?(\d)00[\)\]]?)-([^z]|gy|sz)?[ae]l\b <- \2 != "0" -> \1-zal # Hibás toldalék?
+\b([[\(]?(\d)000[\)\]]?)-([^r]|gy|sz)?[ae]l\b <- \2 != "0" -> \1-rel # Hibás toldalék?
+
+############# *1-ban, *(2)-val, *[3]-nek #################
+
+[Word]
+
+# *2-hez, *(5)-hoz, *[5]-on
+([[\(]?\[?\d*[25][\)\]]?)(-\w*[aoáó]\w?|-hez)
+	<- morph(\2, r"po:(suffix|punct)\b")
+	-> = \1 + \2.translate(str.maketrans("aoáó", u"eeéő")).replace("hez", u"höz")  # Hibás toldalékolás?
+
+([[\(]?(\d*[1479]|\d*[14579]0|\d00|\d*[^0]000)[\)\]]?)(-\w*[aoáóö]\w?)
+	<- morph(\3, r"po:(suffix|punct)\b")
+	-> = \1 + \3.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
+
+([[\(]?(\d*[368]|\d*[2368]0)[\)\]]?)(-\w*[éeöő]\w?)
+	<- morph(\3, r"po:(suffix|punct)\b")
+	-> = \1 + \3.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
+
+# *1-vel, *2-gyel, stb.
+
+#([[\(]?\d*([14][\)\]]?-[^g]|2[\)\]]?-[^v]|3[\)\]]?-[^m]|[567][\)\]]?-[^t]|[89][\)\]]?-[^c]|10[\)\]]?-[^z]|20[\)\]]?-[^s]|30[\)\]]?-[^c]|[456789]0[\)\]]?-[^n]|[1-9]00[\)\]]?-[^z]|000[\)\]]?-[^rv]))(\w?[ae]l|\w?[áé])
+#	<- morph(\1[-1] + \3, r"po:(suffix|punct)\b")
+#	-> = valvel(\1, \2) # Hibás toldalékolás?
 
 ############## több mint #######################
 # több, mint testőr 	-> több mint testőr XXX tavaly, délután stb. miatt nincs kezelve
