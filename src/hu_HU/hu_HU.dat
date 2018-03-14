@@ -467,6 +467,22 @@ az <- not option("grammar") and word(2) and
 az <- option("grammar") and word(1) and
 	re.match(r"([02-46-9]|[1-46-9]\d|[1-46-9]\d\d|[2346-9]\d\d\d)[.]", word(1)) -> a # Hibás névelő?
 
+# check automatic references with article a/az
+# (expanded field content started with ZWSP in LibreOffice 6.1)
+# space or non-breaking space are recognized, as separator
+
+# a 1 -> az 1, a (1) -> az (1)
+a([  ])(?=​[[\(]?(1\b|5|1(\d{3}){1,4}\b)) -> az\1 # Hibás névelő?
+
+# az 2 -> a 2, az (34) -> a (34)
+az([  ])(?=​[[\(]?([2346-9]|1(\d{1,2}|\d{4,5}|\d{7,8}))\b) -> a\1 # Hibás névelő?
+
+# a a) -> az a)
+a([  ])(?=​[aefilmnorsuxyAEFILMNORSUXY]\)) -> az\1 # Hibás névelő?
+
+# az b) -> a b)
+az([  ])(?=​[bcdghjkpqtvwzBCDGHJKPQTVWZ]\)) -> a\1 # Hibás névelő?
+
 # g = gramm
 
 num \d+|\d+,\d+
@@ -805,77 +821,95 @@ főké(p|pen) <- word(-1) != "a" and word(-1) != "A"
 (?<=[1-9]000)-([^r]|gy|sz)?[ae]l\b -> -rel # Hibás toldalék?
 (?<=[1-9]000[\)\]])-([^r]|gy|sz)?[ae]l\b -> -rel # Hibás toldalék?
 
-############# *1-ban, *(2)-val, *[3]-nek #################
+############# *a)-ben, *1-ban, *(2)-val, *[3]-nek #################
 
 [char]
 
+# a)-ben -> a)-ban, b)-ban -> b)-ben
+
+(?<=​[bcdefgijlmnprstvwxz]\))(-\w*[aoáó]\w?)
+	<- morph(\1, r"po:(suffix|punct)\b")
+	-> = \1.translate(str.maketrans("aoáó", u"eeéő"))  # Hibás toldalékolás?
+
+(?<=​[ahkoquy]\))(-\w*[eéő]\w?)
+	<- morph(\1, r"po:(suffix|punct)\b")
+	-> = \1.translate(str.maketrans("eéő", u"aáó")).replace("-at", "-t")  # Hibás toldalékolás?
+
+# *n)-t -> n)-et
+(?<=​[fmnx]\))(-t)\b
+	-> -et  # Hibás toldalékolás?
+
+# *b)-et -> b)-t
+(?<=​[a-eg-lo-wyz]\))(-et)\b
+	-> -t  # Hibás toldalékolás?
+
 # 2-hez, 5-hoz
-(?<=[25])(-\w*[aoáó]\w?|-hez)
+(?<=[25])(-\w*[aoáó]\w?|-hez)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans("aoáó", u"eeéő")).replace("hez", u"höz")  # Hibás toldalékolás?
 
 # *(2)-hez, *[5]-hoz
-(?<=[25][\)\]])(-\w*[aoáó]\w?|-hez)
+(?<=[25][\)\]])(-\w*[aoáó]\w?|-hez)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans("aoáó", u"eeéő")).replace("hez", u"höz")  # Hibás toldalékolás?
 
 # *1-ban
-(?<=[1479])(-\w*[aoáóö]\w?)
+(?<=[1479])(-\w*[aoáóö]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
 
 # *(1)-ban
-(?<=[1479][\)\]])(-\w*[aoáóö]\w?)
+(?<=[1479][\)\]])(-\w*[aoáóö]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
 
 # *10-ban
-(?<=[14579]0)(-\w*[aoáóö]\w?)
+(?<=[14579]0)(-\w*[aoáóö]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
 
 # *(10)-ban
-(?<=[14579]0[\)\]])(-\w*[aoáóö]\w?)
+(?<=[14579]0[\)\]])(-\w*[aoáóö]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
 
 # *1000-ban
-(?<=[1-9]000)(-\w*[aoáóö]\w?)
+(?<=[1-9]000)(-\w*[aoáóö]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
 
 # *(1000)-ban
-(?<=[1-9]000[\)\]])(-\w*[aoáóö]\w?)
+(?<=[1-9]000[\)\]])(-\w*[aoáóö]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"aoáóö", u"eeéőe"))  # Hibás toldalékolás?
 
 # *3-ben
-(?<=[368])(-\w*[éeöő]\w?)
+(?<=[368])(-\w*[éeöő]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
 
 # *(3)-ben
-(?<=[368][\)\]])(-\w*[éeöő]\w?)
+(?<=[368][\)\]])(-\w*[éeöő]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
 
 # *30-ben
-(?<=[2368]0)(-\w*[éeöő]\w?)
+(?<=[2368]0)(-\w*[éeöő]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
 
 # *(30)-ben
-(?<=[2368]0[\)\]])(-\w*[éeöő]\w?)
+(?<=[2368]0[\)\]])(-\w*[éeöő]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
 
 # *100-ben
-(?<=[1-9]00)(-\w*[éeöő]\w?)
+(?<=[1-9]00)(-\w*[éeöő]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
 
 # *(100)-ben
-(?<=[1-9]00[\)\]])(-\w*[éeöő]\w?)
+(?<=[1-9]00[\)\]])(-\w*[éeöő]\w?)\b
 	<- morph(\1, r"po:(suffix|punct)\b")
 	-> = \1.translate(str.maketrans(u"eéöő", u"aáoó")).replace("haz", "hoz")  # Hibás toldalékolás?
 

@@ -1,3 +1,13 @@
+2018-03-14 Németh László <nemeth@numbertext.org>:
+- toldalékolt vagy névelővel ellátott automatikus
+  hivatkozások ellenőrzése
+
+2018-03-12 Németh László <nemeth@numbertext.org>:
+- számok toldalékolásának ellenőrzése
+
+2018-02-02 Németh László <nemeth@numbertext.org>:
+- "a tesztel" -> "a teszttel" stb. javítása
+
 2018-01-17 Németh László <nemeth@numbertext.org>:
 - AkH. 12. kiadásának megfelelő javítások:
   örökkön-örökké -> örökkön örökké
