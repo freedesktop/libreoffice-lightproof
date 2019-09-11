@@ -97,7 +97,7 @@ def mysplit(s, line, oldline, debug):
     if s2[0:1] == '"' and s2[-1:]=='"':
         s2 = s2[1:-1]
     if dec==1:
-        repl[s1] = s2
+        repl[s1] = re.sub(r"\\([dswW])", r"\\\\\1", s2)
         return None
     else:
         for i in repl:
